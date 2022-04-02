@@ -26,7 +26,7 @@ class TimePlanner extends StatefulWidget {
   final TimePlannerStyle? style;
 
   /// When widget loaded scroll to current time with an animation. Default is true
-  final bool? currentTimeAnimation;
+  final bool currentTimeAnimation;
 
   /// Time planner widget
   const TimePlanner({
@@ -36,7 +36,7 @@ class TimePlanner extends StatefulWidget {
     required this.headers,
     this.tasks,
     this.style,
-    this.currentTimeAnimation,
+    this.currentTimeAnimation = true,
   }) : super(key: key);
   @override
   _TimePlannerState createState() => _TimePlannerState();
@@ -49,7 +49,7 @@ class _TimePlannerState extends State<TimePlanner> {
   ScrollController timeVerticalController = ScrollController();
   TimePlannerStyle style = TimePlannerStyle();
   List<TimePlannerTask> tasks = [];
-  bool? isAnimated = true;
+  late bool isAnimated;
 
   /// check input value for rules
   void _checkInputValue() {
@@ -90,17 +90,19 @@ class _TimePlannerState extends State<TimePlanner> {
   void initState() {
     _initData();
     super.initState();
-    Future.delayed(Duration.zero).then((_) {
-      int hour = DateTime.now().hour;
-      if (hour > widget.startHour) {
-        double scrollOffset =
-            (hour - widget.startHour) * Config.cellHeight!.toDouble();
-        mainVerticalController.animateTo(scrollOffset,
-            duration: Duration(milliseconds: 800), curve: Curves.easeOutCirc);
-        timeVerticalController.animateTo(scrollOffset,
-            duration: Duration(milliseconds: 800), curve: Curves.easeOutCirc);
-      }
-    });
+    if (isAnimated) {
+      Future.delayed(Duration.zero).then((_) {
+        int hour = DateTime.now().hour;
+        if (hour > widget.startHour) {
+          double scrollOffset =
+              (hour - widget.startHour) * Config.cellHeight!.toDouble();
+          mainVerticalController.animateTo(scrollOffset,
+              duration: Duration(milliseconds: 800), curve: Curves.easeOutCirc);
+          timeVerticalController.animateTo(scrollOffset,
+              duration: Duration(milliseconds: 800), curve: Curves.easeOutCirc);
+        }
+      });
+    }
   }
 
   @override
