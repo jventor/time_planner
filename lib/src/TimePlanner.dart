@@ -28,6 +28,9 @@ class TimePlanner extends StatefulWidget {
   /// When widget loaded scroll to current time with an animation. Default is true
   final bool currentTimeAnimation;
 
+  ///
+  final bool showHoursColumn;
+
   /// Time planner widget
   const TimePlanner({
     Key? key,
@@ -37,6 +40,7 @@ class TimePlanner extends StatefulWidget {
     this.tasks,
     this.style,
     this.currentTimeAnimation = true,
+    this.showHoursColumn = false,
   }) : super(key: key);
   @override
   _TimePlannerState createState() => _TimePlannerState();
@@ -50,6 +54,7 @@ class _TimePlannerState extends State<TimePlanner> {
   TimePlannerStyle style = TimePlannerStyle();
   List<TimePlannerTask> tasks = [];
   late bool isAnimated;
+  late bool showHours;
 
   /// check input value for rules
   void _checkInputValue() {
@@ -84,6 +89,7 @@ class _TimePlannerState extends State<TimePlanner> {
     Config.startHour = widget.startHour;
     isAnimated = widget.currentTimeAnimation;
     tasks = widget.tasks ?? [];
+    showHours = widget.showHoursColumn;
   }
 
   @override
@@ -135,9 +141,7 @@ class _TimePlannerState extends State<TimePlanner> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  SizedBox(
-                    width: 60,
-                  ),
+                  showHours ? SizedBox(width: 60) : SizedBox(width: 10),
                   for (int i = 0; i < Config.totalDays; i++) widget.headers[i],
                 ],
               ),
@@ -157,20 +161,22 @@ class _TimePlannerState extends State<TimePlanner> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            //first number is start hour and secound number is end hour
-                            for (int i = widget.startHour;
-                                i <= widget.endHour;
-                                i++)
-                              TimePlannerTime(
-                                time: i.toString() + ':00',
-                              ),
-                          ],
-                        ),
+                        showHours
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  //first number is start hour and secound number is end hour
+                                  for (int i = widget.startHour;
+                                      i <= widget.endHour;
+                                      i++)
+                                    TimePlannerTime(
+                                      time: i.toString() + ':00',
+                                    ),
+                                ],
+                              )
+                            : SizedBox(width: 10),
                         Container(
                           height: (Config.totalHours * Config.cellHeight!) + 80,
                           width: 1,
