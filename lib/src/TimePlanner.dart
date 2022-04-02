@@ -154,6 +154,7 @@ class _TimePlannerState extends State<TimePlanner> {
                     physics: NeverScrollableScrollPhysics(),
                     controller: timeVerticalController,
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Column(
