@@ -40,7 +40,7 @@ class TimePlanner extends StatefulWidget {
     this.tasks,
     this.style,
     this.currentTimeAnimation = true,
-    this.showHoursColumn = false,
+    this.showHoursColumn = true,
   }) : super(key: key);
   @override
   _TimePlannerState createState() => _TimePlannerState();
